@@ -1,3 +1,5 @@
+#include "file_header.h"
+#include "section_table.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <windows.h>
@@ -61,9 +63,12 @@ int wmain(int argc, wchar_t *argv[]) {
     }
     wprintf(L"Found valid PE header\n");
 
-    PIMAGE_FILE_HEADER file_header = &nt_headers->FileHeader;
     PIMAGE_OPTIONAL_HEADER optional_header = &nt_headers->OptionalHeader;
 
+    wprintf(L"\n");
+    print_file_header(&nt_headers->FileHeader);
+    print_section_table(IMAGE_FIRST_SECTION(nt_headers),
+                        nt_headers->FileHeader.NumberOfSections);
 
 cleanup:
     if (file_mapping_view != NULL)    { UnmapViewOfFile(file_mapping_view); }
