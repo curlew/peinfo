@@ -63,10 +63,9 @@ int wmain(int argc, wchar_t *argv[]) {
     }
     wprintf(L"Found valid PE header\n");
 
-    PIMAGE_OPTIONAL_HEADER optional_header = &nt_headers->OptionalHeader;
-
     wprintf(L"\n");
     print_file_header(&nt_headers->FileHeader);
+    print_optional_header(&nt_headers->OptionalHeader);
     print_section_table(IMAGE_FIRST_SECTION(nt_headers),
                         nt_headers->FileHeader.NumberOfSections);
 
