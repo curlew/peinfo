@@ -2,7 +2,20 @@
 #include "section_table.h"
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <windows.h>
+
+void print_usage(wchar_t *exe) {
+    wprintf(L"Usage: %s [-fos] FILE\n", exe);
+    _putws(L"View headers and sections of Portable Executable files.\n"
+           L"\n"
+           L"Options:\n"
+           L"  -f  Display file header\n"
+           L"  -o  Display optional header\n"
+           L"  -s  Display section table\n"
+           L"\n"
+           L"If no options are specified, display all available information.");
+}
 
 /*!
  * \retval  0 Success
@@ -11,12 +24,42 @@
  * \retval -3 File is invalid (bad PE header)
  */
 int wmain(int argc, wchar_t *argv[]) {
-    if (argc != 2) {
-        wprintf(L"Usage: %s <PE file path>\n", argv[0]);
-        return 0;
+    wchar_t *file_path = NULL;
+    bool opt_f = false, opt_o = false, opt_s = false;
+
+    for (int i = 1, operand_count = 0; i < argc; ++i) {
+        if (argv[i][0] == L'-') {
+            // option
+            for (wchar_t *c = argv[i] + 1; *c; ++c) {
+                switch (*c) {
+                case L'f': opt_f = true; break;
+                case L'o': opt_o = true; break;
+                case L's': opt_s = true; break;
+                default:
+                    wprintf(L"Invalid option - \"%c\"\n\n", *c);
+                    print_usage(argv[0]);
+                    return 0;
+                }
+            }
+        } else {
+            // operand (non-option argument)
+            if (++operand_count > 1) {
+                print_usage(argv[0]);
+                return 0;
+            }
+            file_path = argv[i];
+        }
     }
 
-    const wchar_t *file_path = argv[1];
+    if (!file_path) {
+        print_usage(argv[0]);
+        return 0;
+    }
+    if (!(opt_f || opt_o || opt_s)) {
+        // default options
+        opt_f = opt_o = opt_s = true;
+    }
+
 
     int ret = 0;
     // variables defined here so cleanup label can be jumped to from anywhere
@@ -64,10 +107,12 @@ int wmain(int argc, wchar_t *argv[]) {
     wprintf(L"Found valid PE header\n");
 
     wprintf(L"\n");
-    print_file_header(&nt_headers->FileHeader);
-    print_optional_header(&nt_headers->OptionalHeader);
-    print_section_table(IMAGE_FIRST_SECTION(nt_headers),
-                        nt_headers->FileHeader.NumberOfSections);
+    if (opt_f) { print_file_header(&nt_headers->FileHeader); }
+    if (opt_o) { print_optional_header(&nt_headers->OptionalHeader); }
+    if (opt_s) {
+        print_section_table(IMAGE_FIRST_SECTION(nt_headers),
+                            nt_headers->FileHeader.NumberOfSections);
+    }
 
 cleanup:
     if (file_mapping_view != NULL)    { UnmapViewOfFile(file_mapping_view); }
