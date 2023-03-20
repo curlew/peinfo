@@ -6,13 +6,14 @@
 #include <windows.h>
 
 void print_usage(wchar_t *exe) {
-    wprintf(L"Usage: %s [-fos] FILE\n", exe);
+    wprintf(L"Usage: %s [options] FILE\n", exe);
     _putws(L"View headers and sections of Portable Executable files.\n"
            L"\n"
            L"Options:\n"
            L"  -f  Display file header\n"
            L"  -o  Display optional header\n"
            L"  -s  Display section table\n"
+           L"  -h  Display this help message and exit\n"
            L"\n"
            L"If no options are specified, display all available information.");
 }
@@ -35,6 +36,9 @@ int wmain(int argc, wchar_t *argv[]) {
                 case L'f': opt_f = true; break;
                 case L'o': opt_o = true; break;
                 case L's': opt_s = true; break;
+                case L'h':
+                    print_usage(argv[0]);
+                    return 0;
                 default:
                     wprintf(L"Invalid option - \"%c\"\n\n", *c);
                     print_usage(argv[0]);
@@ -52,6 +56,7 @@ int wmain(int argc, wchar_t *argv[]) {
     }
 
     if (!file_path) {
+        wprintf(L"No file specified\n\n");
         print_usage(argv[0]);
         return 0;
     }
