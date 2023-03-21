@@ -13,6 +13,7 @@ void print_usage(wchar_t *exe) {
            L"  -f  Display file header\n"
            L"  -o  Display optional header\n"
            L"  -s  Display section table\n"
+           L"  -i  Display import table\n"
            L"  -h  Display this help message and exit\n"
            L"\n"
            L"If no options are specified, display all available information.");
@@ -26,7 +27,7 @@ void print_usage(wchar_t *exe) {
  */
 int wmain(int argc, wchar_t *argv[]) {
     wchar_t *file_path = NULL;
-    bool opt_f = false, opt_o = false, opt_s = false;
+    bool opt_f = false, opt_o = false, opt_s = false, opt_i = false;
 
     for (int i = 1, operand_count = 0; i < argc; ++i) {
         if (argv[i][0] == L'-') {
@@ -36,6 +37,7 @@ int wmain(int argc, wchar_t *argv[]) {
                 case L'f': opt_f = true; break;
                 case L'o': opt_o = true; break;
                 case L's': opt_s = true; break;
+                case L'i': opt_i = true; break;
                 case L'h':
                     print_usage(argv[0]);
                     return 0;
@@ -60,9 +62,9 @@ int wmain(int argc, wchar_t *argv[]) {
         print_usage(argv[0]);
         return 0;
     }
-    if (!(opt_f || opt_o || opt_s)) {
+    if (!(opt_f || opt_o || opt_s || opt_i)) {
         // default options
-        opt_f = opt_o = opt_s = true;
+        opt_f = opt_o = opt_s = opt_i = true;
     }
 
 
@@ -117,6 +119,7 @@ int wmain(int argc, wchar_t *argv[]) {
         print_section_table(IMAGE_FIRST_SECTION(nt_headers),
                             nt_headers->FileHeader.NumberOfSections);
     }
+    if (opt_i) { print_import_table(file_base); }
 
 cleanup:
     if (file_base != NULL)            { VirtualFree(file_base, 0, MEM_RELEASE); }
