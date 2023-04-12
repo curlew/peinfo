@@ -33,10 +33,29 @@ void print_import_table(LPVOID base) {
     }
 
     // https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#import-directory-table
-    PIMAGE_IMPORT_DESCRIPTOR import_dir = (PIMAGE_IMPORT_DESCRIPTOR)rva_to_va(nt_headers, base, import_data_dir->VirtualAddress);
+    PIMAGE_IMPORT_DESCRIPTOR import_dir_table = (PIMAGE_IMPORT_DESCRIPTOR)rva_to_va(nt_headers, base, import_data_dir->VirtualAddress);
 
-    for (PIMAGE_IMPORT_DESCRIPTOR import = import_dir; import->Characteristics != 0; ++import) {
-        wprintf(L" - %S\n", (const char *)rva_to_va(nt_headers, base, import->Name));
+    for (PIMAGE_IMPORT_DESCRIPTOR import_dir_entry = import_dir_table; import_dir_entry->Characteristics != 0; ++import_dir_entry) {
+        // each IMAGE_IMPORT_DESCRIPTOR represents a DLL
+
+        wprintf(L" - %S\n", (const char *)rva_to_va(nt_headers, base, import_dir_entry->Name));
+
+        // https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#import-address-table
+        PIMAGE_THUNK_DATA import_addr_table = rva_to_va(nt_headers, base, import_dir_entry->FirstThunk);
+
+        for (PIMAGE_THUNK_DATA import = import_addr_table; import->u1.AddressOfData != 0; ++import) {
+            // each IMAGE_THUNK_DATA represents a symbol imported from a DLL
+
+            // most significant bit determines type
+            if (IMAGE_SNAP_BY_ORDINAL(import->u1.AddressOfData)) {
+                // import by ordinal
+                wprintf(L"   - %zu\n", IMAGE_ORDINAL(import->u1.AddressOfData));
+            } else {
+                // import by name
+                PIMAGE_IMPORT_BY_NAME name = rva_to_va(nt_headers, base, import->u1.AddressOfData); // TODO:
+                wprintf(L"   - %S\n", name->Name);
+            }
+        }
     }
 
     wprintf(L"\n");
