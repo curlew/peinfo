@@ -1,4 +1,6 @@
+#include "data_directories.h"
 #include "file_header.h"
+#include "optional_header.h"
 #include "section_table.h"
 #include <stdio.h>
 #include <stdint.h>
@@ -14,6 +16,7 @@ void print_usage(wchar_t *exe) {
            L"  -o  Display optional header\n"
            L"  -s  Display section table\n"
            L"  -i  Display import table\n"
+           L"  -e  Display export table\n"
            L"  -h  Display this help message and exit\n"
            L"\n"
            L"If no options are specified, display all available information.");
@@ -27,7 +30,7 @@ void print_usage(wchar_t *exe) {
  */
 int wmain(int argc, wchar_t *argv[]) {
     wchar_t *file_path = NULL;
-    bool opt_f = false, opt_o = false, opt_s = false, opt_i = false;
+    bool opt_f = false, opt_o = false, opt_s = false, opt_i = false, opt_e = false;
 
     for (int i = 1, operand_count = 0; i < argc; ++i) {
         if (argv[i][0] == L'-') {
@@ -38,6 +41,7 @@ int wmain(int argc, wchar_t *argv[]) {
                 case L'o': opt_o = true; break;
                 case L's': opt_s = true; break;
                 case L'i': opt_i = true; break;
+                case L'e': opt_e = true; break;
                 case L'h':
                     print_usage(argv[0]);
                     return 0;
@@ -62,9 +66,9 @@ int wmain(int argc, wchar_t *argv[]) {
         print_usage(argv[0]);
         return 0;
     }
-    if (!(opt_f || opt_o || opt_s || opt_i)) {
+    if (!(opt_f || opt_o || opt_s || opt_i || opt_e)) {
         // default options
-        opt_f = opt_o = opt_s = opt_i = true;
+        opt_f = opt_o = opt_s = opt_i = opt_e = true;
     }
 
 
@@ -112,14 +116,22 @@ int wmain(int argc, wchar_t *argv[]) {
         goto cleanup;
     }
 
-    wprintf(L"\n");
-    if (opt_f) { print_file_header(&nt_headers->FileHeader); }
-    if (opt_o) { print_optional_header(&nt_headers->OptionalHeader); }
+    if (opt_f) {
+        print_file_header(&nt_headers->FileHeader);
+    }
+    if (opt_o) {
+        print_optional_header(&nt_headers->OptionalHeader);
+    }
     if (opt_s) {
         print_section_table(IMAGE_FIRST_SECTION(nt_headers),
                             nt_headers->FileHeader.NumberOfSections);
     }
-    if (opt_i) { print_import_table(file_base); }
+    if (opt_i) {
+        print_import_table(file_base);
+    }
+    if (opt_e) {
+        print_export_table(file_base);
+    }
 
 cleanup:
     if (file_base != NULL)            { VirtualFree(file_base, 0, MEM_RELEASE); }
