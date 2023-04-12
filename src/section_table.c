@@ -1,5 +1,7 @@
 #include "section_table.h"
 
+#include <stdio.h>
+
 #define SECTION_CHARACTERISTICS \
     X(IMAGE_SCN_TYPE_NO_PAD)          X(IMAGE_SCN_CNT_CODE) \
     X(IMAGE_SCN_CNT_INITIALIZED_DATA) X(IMAGE_SCN_CNT_UNINITIALIZED_DATA) \

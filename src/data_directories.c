@@ -59,7 +59,7 @@ void print_export_table(LPVOID base) {
     // https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#export-name-pointer-table
     PDWORD name_ptr_table = rva_to_va(nt_headers, base, export_dir->AddressOfNames);
 
-    for (int i = 0; i < export_dir->NumberOfNames; ++i) {
+    for (DWORD i = 0; i < export_dir->NumberOfNames; ++i) {
         wprintf(L" - %S\n", (const char *)rva_to_va(nt_headers, base, name_ptr_table[i]));
     }
 

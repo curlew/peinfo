@@ -11,3 +11,4 @@ add_executable(peinfo
 )
 
 target_compile_definitions(peinfo PRIVATE UNICODE _UNICODE WIN32_LEAN_AND_MEAN)
+target_compile_options(peinfo PRIVATE /W4)

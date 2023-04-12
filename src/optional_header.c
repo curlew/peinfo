@@ -1,5 +1,7 @@
 #include "optional_header.h"
 
+#include <stdio.h>
+
 void print_optional_header(PIMAGE_OPTIONAL_HEADER header) {
     _putws(L"____________________  Optional Header  _________________________________________");
 
