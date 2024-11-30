@@ -64,9 +64,22 @@ void print_import_table(LPVOID base) {
 void print_export_table(LPVOID base) {
     _putws(L"____________________  Export Table  ____________________________________________");
 
-    PIMAGE_NT_HEADERS nt_headers = (PIMAGE_NT_HEADERS)((uint8_t *)base + ((PIMAGE_DOS_HEADER)base)->e_lfanew);
+    LPVOID nt_headers = (uint8_t *)base + ((PIMAGE_DOS_HEADER)base)->e_lfanew;
 
-    PIMAGE_DATA_DIRECTORY export_data_dir = &nt_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
+    WORD magic = ((PIMAGE_NT_HEADERS32)nt_headers)->OptionalHeader.Magic;
+    PIMAGE_DATA_DIRECTORY export_data_dir;
+
+    if (magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
+        // 32-bit (PE32 format)
+        export_data_dir = &((PIMAGE_NT_HEADERS32)nt_headers)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
+    } else if (magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC) {
+        // 64-bit (PE32+ format)
+        export_data_dir = &((PIMAGE_NT_HEADERS64)nt_headers)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
+    } else {
+        wprintf(L"Invalid optional header magic number\n\n");
+        return;
+    }
+
     if (export_data_dir->Size == 0) {
         wprintf(L"Export table is empty\n\n");
         return;
@@ -81,18 +94,18 @@ void print_export_table(LPVOID base) {
 
     wprintf(L"Number of functions: %lu\nNumber of names: %lu\nOrdinal base: %lu\n\n",
             export_dir->NumberOfFunctions, export_dir->NumberOfNames, export_dir->Base);
-
     wprintf(L"%-11s%-11s%-25s\n", L"Ordinal", L"RVA", L"Name");
+
     for (DWORD i = 0; i < export_dir->NumberOfFunctions; ++i) {
         if (address_table[i] == 0) { continue; }
 
         DWORD biased_ordinal = i + export_dir->Base;
+        const char *name = NULL;
 
         // Search for corresponding export name
-        char *name = NULL;
         for (DWORD j = 0; j < export_dir->NumberOfNames; ++j) {
             if (i == ordinal_table[j]) {
-                name = (char *)rva_to_va(nt_headers, base, name_ptr_table[j]);
+                name = (const char *)rva_to_va(nt_headers, base, name_ptr_table[j]);
                 break;
             }
         }
@@ -101,25 +114,14 @@ void print_export_table(LPVOID base) {
             address_table[i] > export_data_dir->VirtualAddress + export_data_dir->Size) {
             // Field is an export RVA
 
-            wprintf(L"%-11hu%-11.8lX%-25S\n",
-                    biased_ordinal,
-                    address_table[i],
-                    name ? name : "[NONAME]");
+            wprintf(L"%-11lu%-11.8lX%-25S\n",
+                    biased_ordinal, address_table[i], name ? name : "[NONAME]");
         } else {
             // Field is a forwarder RVA (pointer to string) specifying a symbol in another DLL
 
-            if (name) {
-                wprintf(L"%-11hu%-11s%S (forwarded to %S)\n",
-                        biased_ordinal,
-                        L"",
-                        name,
-                        (const char *)rva_to_va(nt_headers, base, address_table[i]));
-            } else {
-                wprintf(L"%-11hu%-11s[NONAME] (forwarded to %S)\n",
-                        biased_ordinal,
-                        L"",
-                        (const char *)rva_to_va(nt_headers, base, address_table[i]));
-            }
+            const char *forwarder_string = rva_to_va(nt_headers, base, address_table[i]);
+            wprintf(L"%-11lu%-11s%S (forwarded to %S)\n",
+                    biased_ordinal, L"", name ? name : "[NONAME]", forwarder_string);
         }
     }
 
