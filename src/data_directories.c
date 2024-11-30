@@ -75,11 +75,52 @@ void print_export_table(LPVOID base) {
     // https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#export-directory-table
     PIMAGE_EXPORT_DIRECTORY export_dir = (PIMAGE_EXPORT_DIRECTORY)rva_to_va(nt_headers, base, export_data_dir->VirtualAddress);
 
-    // https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#export-name-pointer-table
+    PDWORD address_table  = rva_to_va(nt_headers, base, export_dir->AddressOfFunctions);
     PDWORD name_ptr_table = rva_to_va(nt_headers, base, export_dir->AddressOfNames);
+    PWORD  ordinal_table  = rva_to_va(nt_headers, base, export_dir->AddressOfNameOrdinals);
 
-    for (DWORD i = 0; i < export_dir->NumberOfNames; ++i) {
-        wprintf(L" - %S\n", (const char *)rva_to_va(nt_headers, base, name_ptr_table[i]));
+    wprintf(L"Number of functions: %lu\nNumber of names: %lu\nOrdinal base: %lu\n\n",
+            export_dir->NumberOfFunctions, export_dir->NumberOfNames, export_dir->Base);
+
+    wprintf(L"%-11s%-11s%-25s\n", L"Ordinal", L"RVA", L"Name");
+    for (DWORD i = 0; i < export_dir->NumberOfFunctions; ++i) {
+        if (address_table[i] == 0) { continue; }
+
+        DWORD biased_ordinal = i + export_dir->Base;
+
+        // Search for corresponding export name
+        char *name = NULL;
+        for (DWORD j = 0; j < export_dir->NumberOfNames; ++j) {
+            if (i == ordinal_table[j]) {
+                name = (char *)rva_to_va(nt_headers, base, name_ptr_table[j]);
+                break;
+            }
+        }
+        // Check if address is outside export section
+        if (address_table[i] < export_data_dir->VirtualAddress ||
+            address_table[i] > export_data_dir->VirtualAddress + export_data_dir->Size) {
+            // Field is an export RVA
+
+            wprintf(L"%-11hu%-11.8lX%-25S\n",
+                    biased_ordinal,
+                    address_table[i],
+                    name ? name : "[NONAME]");
+        } else {
+            // Field is a forwarder RVA (pointer to string) specifying a symbol in another DLL
+
+            if (name) {
+                wprintf(L"%-11hu%-11s%S (forwarded to %S)\n",
+                        biased_ordinal,
+                        L"",
+                        name,
+                        (const char *)rva_to_va(nt_headers, base, address_table[i]));
+            } else {
+                wprintf(L"%-11hu%-11s[NONAME] (forwarded to %S)\n",
+                        biased_ordinal,
+                        L"",
+                        (const char *)rva_to_va(nt_headers, base, address_table[i]));
+            }
+        }
     }
 
     wprintf(L"\n");

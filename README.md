@@ -248,76 +248,51 @@ ____________________  Import Table  ____________________________________________
 
 ```
 ____________________  Export Table  ____________________________________________
- - _CreateFrameInfo
- - _CxxThrowException
- - _FindAndUnlinkFrame
- - _IsExceptionObjectToBeDestroyed
- - __AdjustPointer
- - __BuildCatchObject
- - __BuildCatchObjectHelper
- - __C_specific_handler
- - __C_specific_handler_noexcept
- - __CxxDetectRethrow
- - __CxxExceptionFilter
- - __CxxFrameHandler
- - __CxxFrameHandler2
- - __CxxFrameHandler3
- - __CxxQueryExceptionSize
- - __CxxRegisterExceptionObject
- - __CxxUnregisterExceptionObject
- - __DestructExceptionObject
- - __FrameUnwindFilter
- - __GetPlatformExceptionInfo
- - __NLG_Dispatch2
- - __NLG_Return2
- - __RTCastToVoid
- - __RTDynamicCast
- - __RTtypeid
- - __TypeMatch
- - __current_exception
- - __current_exception_context
- - __intrinsic_setjmp
- - __intrinsic_setjmpex
- - __processing_throw
- - __report_gsfailure
- - __std_exception_copy
- - __std_exception_destroy
- - __std_terminate
- - __std_type_info_compare
- - __std_type_info_destroy_list
- - __std_type_info_hash
- - __std_type_info_name
- - __telemetry_main_invoke_trigger
- - __telemetry_main_return_trigger
- - __unDName
- - __unDNameEx
- - __uncaught_exception
- - __uncaught_exceptions
- - __vcrt_GetModuleFileNameW
- - __vcrt_GetModuleHandleW
- - __vcrt_InitializeCriticalSectionEx
- - __vcrt_LoadLibraryExW
- - _get_purecall_handler
- - _get_unexpected
- - _is_exception_typeof
- - _local_unwind
- - _purecall
- - _set_purecall_handler
- - _set_se_translator
- - longjmp
- - memchr
- - memcmp
- - memcpy
- - memmove
- - memset
- - set_unexpected
- - strchr
- - strrchr
- - strstr
- - unexpected
- - wcschr
- - wcsrchr
- - wcsstr
+Number of functions: 1634
+Number of names: 1634
+Ordinal base: 1
+
+Ordinal    RVA        Name
+1                     AcquireSRWLockExclusive (forwarded to NTDLL.RtlAcquireSRWLockExclusive)
+2                     AcquireSRWLockShared (forwarded to NTDLL.RtlAcquireSRWLockShared)
+3          000203C0   ActivateActCtx
+4          0001BA40   ActivateActCtxWorker
+5          0005B850   AddAtomA
+6          00012920   AddAtomW
+7          00025980   AddConsoleAliasA
+8          00025990   AddConsoleAliasW
+9                     AddDllDirectory (forwarded to api-ms-win-core-libraryloader-l1-1-0.AddDllDirectory)
+10         0003E3F0   AddIntegrityLabelToBoundaryDescriptor
+11         0005B990   AddLocalAlternateComputerNameA
+12         0005B9F0   AddLocalAlternateComputerNameW
+13         000225B0   AddRefActCtx
+14         0001E600   AddRefActCtxWorker
+15         0003BD30   AddResourceAttributeAce
+16         00020BE0   AddSIDToBoundaryDescriptor
+17         0003BD50   AddScopedPolicyIDAce
+18         0003A150   AddSecureMemoryCacheCallback
+19                    AddVectoredContinueHandler (forwarded to NTDLL.RtlAddVectoredContinueHandler)
+20                    AddVectoredExceptionHandler (forwarded to NTDLL.RtlAddVectoredExceptionHandler)
+21         00007200   AdjustCalendarDate
+22         000255D0   AllocConsole
+23         0003BD90   AllocateUserPhysicalPages
+24         0003BD70   AllocateUserPhysicalPagesNuma
+25                    AppPolicyGetClrCompat (forwarded to kernelbase.AppPolicyGetClrCompat)
+26                    AppPolicyGetCreateFileAccess (forwarded to kernelbase.AppPolicyGetCreateFileAccess)
+27                    AppPolicyGetLifecycleManagement (forwarded to kernelbase.AppPolicyGetLifecycleManagement)
+28                    AppPolicyGetMediaFoundationCodecLoading (forwarded to kernelbase.AppPolicyGetMediaFoundationCodecLoading)
+29                    AppPolicyGetProcessTerminationMethod (forwarded to kernelbase.AppPolicyGetProcessTerminationMethod)
+30                    AppPolicyGetShowDeveloperDiagnostic (forwarded to kernelbase.AppPolicyGetShowDeveloperDiagnostic)
+31                    AppPolicyGetThreadInitializationType (forwarded to kernelbase.AppPolicyGetThreadInitializationType)
+32                    AppPolicyGetWindowingModel (forwarded to kernelbase.AppPolicyGetWindowingModel)
+33                    AppXGetOSMaxVersionTested (forwarded to kernelbase.AppXGetOSMaxVersionTested)
+34         00045540   ApplicationRecoveryFinished
+35         00045550   ApplicationRecoveryInProgress
+36         00020F30   AreFileApisANSI
+37         00020240   AssignProcessToJobObject
+38         000255E0   AttachConsole
+39         0005E3F0   BackupRead
+40         0005F5B0   BackupSeek
 ```
 
 </details>
