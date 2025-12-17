@@ -3,9 +3,15 @@
 # peinfo
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/curlew/peinfo/cmake.yml?logo=github&style=flat-square)](https://github.com/curlew/peinfo/actions/workflows/cmake.yml)
+[![Latest tag](https://img.shields.io/github/v/tag/curlew/peinfo?color=informational&logo=github&style=flat-square)](https://github.com/curlew/peinfo/tags)
 [![License](https://img.shields.io/github/license/curlew/peinfo?style=flat-square)](https://github.com/curlew/peinfo/blob/main/LICENSE)
 
 </div>
+
+## Overview
+
+`peinfo` is a small standalone utility for examining Portable Executable (PE) files.
+
 
 ## Usage
 
