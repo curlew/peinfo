@@ -1,9 +1,10 @@
 #include "optional_header.h"
 
+#include "utils.h"
 #include <stdio.h>
 
 void print_optional_header(PIMAGE_OPTIONAL_HEADER header) {
-    _putws(L"____________________  Optional Header  _________________________________________");
+    print_heading(L"Optional Header");
 
     const wchar_t *fmt_byte          = L"%-27s : %hhu\n",
                   *fmt_word          = L"%-27s : %hu\n",

@@ -1,6 +1,7 @@
 #include "file_header.h"
 
 #include "characteristics.h"
+#include "utils.h"
 #include <stdio.h>
 
 #define FILE_CHARACTERISTIC_LIST(X) \
@@ -17,9 +18,8 @@ const struct characteristic file_characteristics[] = {
     FILE_CHARACTERISTIC_LIST(GENERATE_CHARACTERISTIC_STRUCT)
 };
 
-
 void print_file_header(PIMAGE_FILE_HEADER header) {
-    _putws(L"____________________  File Header  _____________________________________________");
+    print_heading(L"File Header");
 
     const wchar_t *fmt_word_hex = L"%-20s : %#06x\n",
                   *fmt_word     = L"%-20s : %hu\n",

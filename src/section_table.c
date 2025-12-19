@@ -1,6 +1,7 @@
 #include "section_table.h"
 
 #include "characteristics.h"
+#include "utils.h"
 #include <stdio.h>
 
 #define SECTION_CHARACTERISTIC_LIST(X) \
@@ -29,7 +30,7 @@ const struct characteristic section_characteristics[] = {
 
 
 void print_section_table(PIMAGE_SECTION_HEADER header, WORD section_count) {
-    _putws(L"____________________  Section Table  ___________________________________________");
+    print_heading(L"Section Table");
 
     for (int i = 0; i < section_count; ++i, ++header) {
         wprintf(L"  [ Section %d of %d ]\n", i + 1, section_count);

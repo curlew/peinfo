@@ -1,5 +1,6 @@
 #include "data_directories.h"
 
+#include "utils.h"
 #include <stdio.h>
 #include <stdint.h>
 
@@ -22,7 +23,7 @@ static LPVOID rva_to_va(PIMAGE_NT_HEADERS nt_headers, LPVOID base, DWORD rva) {
 }
 
 void print_import_table(LPVOID base) {
-    _putws(L"____________________  Import Table  ____________________________________________");
+    print_heading(L"Import Table");
 
     PIMAGE_NT_HEADERS nt_headers = (PIMAGE_NT_HEADERS)((uint8_t *)base + ((PIMAGE_DOS_HEADER)base)->e_lfanew);
 
@@ -62,7 +63,7 @@ void print_import_table(LPVOID base) {
 }
 
 void print_export_table(LPVOID base) {
-    _putws(L"____________________  Export Table  ____________________________________________");
+    print_heading(L"Export Table");
 
     LPVOID nt_headers = (uint8_t *)base + ((PIMAGE_DOS_HEADER)base)->e_lfanew;
 
