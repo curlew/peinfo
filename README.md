@@ -36,7 +36,7 @@ If no options are specified, display all available information.
 
 ```
 ____________________  File Header  _____________________________________________
-Machine              : 0x8664
+Machine              : 0x8664 (x64)
 NumberOfSections     : 6
 TimeDateStamp        : 1714645064
 PointerToSymbolTable : 0

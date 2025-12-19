@@ -18,20 +18,22 @@ const struct characteristic file_characteristics[] = {
     FILE_CHARACTERISTIC_LIST(GENERATE_CHARACTERISTIC_STRUCT)
 };
 
+static const wchar_t *get_machine_description(WORD machine);
+
 void print_file_header(PIMAGE_FILE_HEADER header) {
     print_heading(L"File Header");
 
-    const wchar_t *fmt_word_hex = L"%-20s : %#06x\n",
-                  *fmt_word     = L"%-20s : %hu\n",
-                  *fmt_dword    = L"%-20s : %lu\n";
-    wprintf(fmt_word_hex, L"Machine",              header->Machine);
-    wprintf(fmt_word,     L"NumberOfSections",     header->NumberOfSections);
-    wprintf(fmt_dword,    L"TimeDateStamp",        header->TimeDateStamp);
-    wprintf(fmt_dword,    L"PointerToSymbolTable", header->PointerToSymbolTable);
-    wprintf(fmt_dword,    L"NumberOfSymbols",      header->NumberOfSymbols);
-    wprintf(fmt_word,     L"SizeOfOptionalHeader", header->SizeOfOptionalHeader);
+    #define FMT_WORD     L"%-20s : %hu"
+    #define FMT_WORD_HEX L"%-20s : %#06x"
+    #define FMT_DWORD    L"%-20s : %lu"
 
-    wprintf(L"%-20s : %#06x", L"Characteristics", header->Characteristics);
+    wprintf(FMT_WORD_HEX L" (%s)\n", L"Machine",              header->Machine, get_machine_description(header->Machine));
+    wprintf(FMT_WORD L"\n",          L"NumberOfSections",     header->NumberOfSections);
+    wprintf(FMT_DWORD L"\n",         L"TimeDateStamp",        header->TimeDateStamp);
+    wprintf(FMT_DWORD L"\n",         L"PointerToSymbolTable", header->PointerToSymbolTable);
+    wprintf(FMT_DWORD L"\n",         L"NumberOfSymbols",      header->NumberOfSymbols);
+    wprintf(FMT_WORD L"\n",          L"SizeOfOptionalHeader", header->SizeOfOptionalHeader);
+    wprintf(FMT_WORD_HEX,            L"Characteristics",      header->Characteristics);
     if (header->Characteristics == 0) {
         wprintf(L"\n");
     } else {
@@ -42,4 +44,15 @@ void print_file_header(PIMAGE_FILE_HEADER header) {
     }
 
     wprintf(L"\n");
+}
+
+const wchar_t *get_machine_description(WORD machine) {
+    // See https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#machine-types
+    switch (machine) {
+        case IMAGE_FILE_MACHINE_I386:  return L"x86";
+        case IMAGE_FILE_MACHINE_AMD64: return L"x64";
+        case IMAGE_FILE_MACHINE_ARM:   return L"ARM little-endian";
+        case IMAGE_FILE_MACHINE_ARM64: return L"ARM64 little-endian";
+        default:                       return L"Unknown";
+    }
 }
