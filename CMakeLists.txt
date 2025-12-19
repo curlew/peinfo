@@ -4,6 +4,7 @@ project(peinfo VERSION 1.0.0)
 
 add_executable(peinfo
     src/main.c
+    src/characteristics.c
     src/file_header.c
     src/section_table.c
     src/optional_header.c

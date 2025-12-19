@@ -1,8 +1,9 @@
 #include "section_table.h"
 
+#include "characteristics.h"
 #include <stdio.h>
 
-#define SECTION_CHARACTERISTICS \
+#define SECTION_CHARACTERISTIC_LIST(X) \
     X(IMAGE_SCN_TYPE_NO_PAD)          X(IMAGE_SCN_CNT_CODE) \
     X(IMAGE_SCN_CNT_INITIALIZED_DATA) X(IMAGE_SCN_CNT_UNINITIALIZED_DATA) \
     X(IMAGE_SCN_LNK_OTHER)            X(IMAGE_SCN_LNK_INFO) \
@@ -21,6 +22,11 @@
     X(IMAGE_SCN_MEM_NOT_PAGED)        X(IMAGE_SCN_MEM_SHARED) \
     X(IMAGE_SCN_MEM_EXECUTE)          X(IMAGE_SCN_MEM_READ) \
     X(IMAGE_SCN_MEM_WRITE)
+
+const struct characteristic section_characteristics[] = {
+    SECTION_CHARACTERISTIC_LIST(GENERATE_CHARACTERISTIC_STRUCT)
+};
+
 
 void print_section_table(PIMAGE_SECTION_HEADER header, WORD section_count) {
     _putws(L"____________________  Section Table  ___________________________________________");
@@ -45,20 +51,9 @@ void print_section_table(PIMAGE_SECTION_HEADER header, WORD section_count) {
         if (header->Characteristics == 0) {
             wprintf(L"\n");
         } else {
-            int flags_printed = 0;
             wprintf(L" (");
-
-            #define X(flag) \
-                if (header->Characteristics & flag) { \
-                    if (flags_printed > 0) { wprintf(L", "); } \
-                    wprintf(L"%S", #flag); \
-                    ++flags_printed; \
-                }
-
-            SECTION_CHARACTERISTICS
-
-            #undef X
-
+            print_characteristics(header->Characteristics, section_characteristics,
+                                  sizeof (section_characteristics) / sizeof (section_characteristics[0]));
             wprintf(L")\n");
         }
 
