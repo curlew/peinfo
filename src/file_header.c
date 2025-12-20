@@ -3,6 +3,7 @@
 #include "characteristics.h"
 #include "utils.h"
 #include <stdio.h>
+#include <time.h>
 
 #define FILE_CHARACTERISTIC_LIST(X) \
     X(IMAGE_FILE_RELOCS_STRIPPED)    X(IMAGE_FILE_EXECUTABLE_IMAGE) \
@@ -27,9 +28,15 @@ void print_file_header(PIMAGE_FILE_HEADER header) {
     #define FMT_WORD_HEX L"%-20s : %#06x"
     #define FMT_DWORD    L"%-20s : %lu"
 
+    time_t timestamp = header->TimeDateStamp;
+    struct tm timestamp_utc;
+    wchar_t timestamp_str[30];
+    gmtime_s(&timestamp_utc, &timestamp);
+    wcsftime(timestamp_str, 30, L"%Y-%m-%d %H:%M:%S UTC", &timestamp_utc);
+
     wprintf(FMT_WORD_HEX L" (%s)\n", L"Machine",              header->Machine, get_machine_description(header->Machine));
     wprintf(FMT_WORD L"\n",          L"NumberOfSections",     header->NumberOfSections);
-    wprintf(FMT_DWORD L"\n",         L"TimeDateStamp",        header->TimeDateStamp);
+    wprintf(FMT_DWORD L" (%s)\n",    L"TimeDateStamp",        header->TimeDateStamp, timestamp_str);
     wprintf(FMT_DWORD L"\n",         L"PointerToSymbolTable", header->PointerToSymbolTable);
     wprintf(FMT_DWORD L"\n",         L"NumberOfSymbols",      header->NumberOfSymbols);
     wprintf(FMT_WORD L"\n",          L"SizeOfOptionalHeader", header->SizeOfOptionalHeader);

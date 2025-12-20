@@ -37,8 +37,8 @@ If no options are specified, display all available information.
 ```
 ____________________  File Header  _____________________________________________
 Machine              : 0x8664 (x64)
-NumberOfSections     : 6
-TimeDateStamp        : 1714645064
+NumberOfSections     : 7
+TimeDateStamp        : 1766202990 (2025-12-20 03:56:30 UTC)
 PointerToSymbolTable : 0
 NumberOfSymbols      : 0
 SizeOfOptionalHeader : 240
