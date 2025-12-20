@@ -41,10 +41,10 @@ void print_import_table(LPVOID base) {
 
         wprintf(L" - %S\n", (const char *)rva_to_va(nt_headers, base, import_dir_entry->Name));
 
-        // https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#import-address-table
-        PIMAGE_THUNK_DATA import_addr_table = rva_to_va(nt_headers, base, import_dir_entry->FirstThunk);
+        // https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#import-lookup-table
+        PIMAGE_THUNK_DATA import_lookup_table = rva_to_va(nt_headers, base, import_dir_entry->OriginalFirstThunk);
 
-        for (PIMAGE_THUNK_DATA import = import_addr_table; import->u1.AddressOfData != 0; ++import) {
+        for (PIMAGE_THUNK_DATA import = import_lookup_table; import->u1.AddressOfData != 0; ++import) {
             // each IMAGE_THUNK_DATA represents a symbol imported from a DLL
 
             // most significant bit determines type
@@ -54,7 +54,7 @@ void print_import_table(LPVOID base) {
             } else {
                 // import by name
                 PIMAGE_IMPORT_BY_NAME name = rva_to_va(nt_headers, base, import->u1.AddressOfData); // TODO:
-                wprintf(L"   - %S\n", name->Name);
+                wprintf(L"   - %4hX %S\n", name->Hint, name->Name);
             }
         }
     }

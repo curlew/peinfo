@@ -188,45 +188,45 @@ Characteristics      : 0x42000040 (IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM
 ```
 ____________________  Import Table  ____________________________________________
  - SHELL32.dll
-   - ShellExecuteW
+   -  1AE ShellExecuteW
  - KERNEL32.dll
-   - GetCurrentThreadId
-   - GetSystemTimeAsFileTime
-   - GetTickCount
-   - RtlCaptureContext
-   - GetCurrentProcessId
-   - RtlVirtualUnwind
-   - UnhandledExceptionFilter
-   - SetUnhandledExceptionFilter
-   - GetCurrentProcess
-   - TerminateProcess
-   - QueryPerformanceCounter
-   - RtlLookupFunctionEntry
+   -  224 GetCurrentThreadId
+   -  2F2 GetSystemTimeAsFileTime
+   -  310 GetTickCount
+   -  4D4 RtlCaptureContext
+   -  220 GetCurrentProcessId
+   -  4E2 RtlVirtualUnwind
+   -  5BE UnhandledExceptionFilter
+   -  57D SetUnhandledExceptionFilter
+   -  21F GetCurrentProcess
+   -  59C TerminateProcess
+   -  451 QueryPerformanceCounter
+   -  4DB RtlLookupFunctionEntry
  - msvcrt.dll
-   - __setusermatherr
-   - _initterm
-   - __C_specific_handler
-   - _wcmdln
-   - _fmode
-   - _commode
-   - ?terminate@@YAXXZ
-   - _cexit
-   - __wgetmainargs
-   - _amsg_exit
-   - _XcptFilter
-   - exit
-   - __set_app_type
-   - _exit
+   -   90 __setusermatherr
+   -  17D _initterm
+   -   57 __C_specific_handler
+   -  382 _wcmdln
+   -  127 _fmode
+   -   D2 _commode
+   -   2F ?terminate@@YAXXZ
+   -   C1 _cexit
+   -   9D __wgetmainargs
+   -   AE _amsg_exit
+   -   55 _XcptFilter
+   -  432 exit
+   -   8E __set_app_type
+   -  10E _exit
  - ADVAPI32.dll
-   - EventSetInformation
-   - EventWriteTransfer
-   - EventRegister
+   -  122 EventSetInformation
+   -  129 EventWriteTransfer
+   -  121 EventRegister
  - api-ms-win-core-synch-l1-2-0.dll
-   - Sleep
+   -   2D Sleep
  - api-ms-win-core-processthreads-l1-1-0.dll
-   - GetStartupInfoW
+   -   20 GetStartupInfoW
  - api-ms-win-core-libraryloader-l1-2-0.dll
-   - GetModuleHandleW
+   -   14 GetModuleHandleW
 ```
 
 </details>
