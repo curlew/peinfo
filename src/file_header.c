@@ -24,9 +24,10 @@ static const wchar_t *get_machine_description(WORD machine);
 void print_file_header(PIMAGE_FILE_HEADER header) {
     print_heading(L"File Header");
 
-    #define FMT_WORD     L"%-20s : %hu"
-    #define FMT_WORD_HEX L"%-20s : %#06x"
-    #define FMT_DWORD    L"%-20s : %lu"
+    #define FMT_WORD      L"%-20s : %hu"
+    #define FMT_WORD_HEX  L"%-20s : 0x%hX"
+    #define FMT_DWORD     L"%-20s : %lu"
+    #define FMT_DWORD_HEX L"%-20s : 0x%lX"
 
     time_t timestamp = header->TimeDateStamp;
     struct tm timestamp_utc;
@@ -37,9 +38,9 @@ void print_file_header(PIMAGE_FILE_HEADER header) {
     wprintf(FMT_WORD_HEX L" (%s)\n", L"Machine",              header->Machine, get_machine_description(header->Machine));
     wprintf(FMT_WORD L"\n",          L"NumberOfSections",     header->NumberOfSections);
     wprintf(FMT_DWORD L" (%s)\n",    L"TimeDateStamp",        header->TimeDateStamp, timestamp_str);
-    wprintf(FMT_DWORD L"\n",         L"PointerToSymbolTable", header->PointerToSymbolTable);
+    wprintf(FMT_DWORD_HEX L"\n",     L"PointerToSymbolTable", header->PointerToSymbolTable);
     wprintf(FMT_DWORD L"\n",         L"NumberOfSymbols",      header->NumberOfSymbols);
-    wprintf(FMT_WORD L"\n",          L"SizeOfOptionalHeader", header->SizeOfOptionalHeader);
+    wprintf(FMT_WORD_HEX L"\n",      L"SizeOfOptionalHeader", header->SizeOfOptionalHeader);
     wprintf(FMT_WORD_HEX,            L"Characteristics",      header->Characteristics);
     if (header->Characteristics == 0) {
         wprintf(L"\n");

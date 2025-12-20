@@ -3,48 +3,99 @@
 #include "utils.h"
 #include <stdio.h>
 
+static const wchar_t *get_subsystem_description(WORD subsystem);
+
 void print_optional_header(PIMAGE_OPTIONAL_HEADER header) {
     print_heading(L"Optional Header");
 
-    const wchar_t *fmt_byte          = L"%-27s : %hhu\n",
-                  *fmt_word          = L"%-27s : %hu\n",
-                  *fmt_dword         = L"%-27s : %lu\n",
-                  *fmt_ulonglong     = L"%-27s : %llu\n",
-                  *fmt_word_hex      = L"%-27s : 0x%hX\n",
-                  *fmt_dword_hex     = L"%-27s : 0x%lX\n",
-                  *fmt_ulonglong_hex = L"%-27s : 0x%llX\n";
+    // TODO: handle 32-bit files (IMAGE_OPTIONAL_HEADER32)
 
-    wprintf(fmt_word_hex, L"Magic", header->Magic);
-    wprintf(fmt_byte, L"MajorLinkerVersion", header->MajorLinkerVersion);
-    wprintf(fmt_byte, L"MinorLinkerVersion", header->MinorLinkerVersion);
-    wprintf(fmt_dword, L"SizeOfCode", header->SizeOfCode);
-    wprintf(fmt_dword, L"SizeOfInitializedData", header->SizeOfInitializedData);
-    wprintf(fmt_dword, L"SizeOfUninitializedData", header->SizeOfUninitializedData);
-    wprintf(fmt_dword_hex, L"AddressOfEntryPoint", header->AddressOfEntryPoint);
-    wprintf(fmt_dword_hex, L"BaseOfCode", header->BaseOfCode);
-    wprintf(fmt_ulonglong_hex, L"ImageBase", header->ImageBase);
-    wprintf(fmt_dword, L"SectionAlignment", header->SectionAlignment);
-    wprintf(fmt_dword, L"FileAlignment", header->FileAlignment);
-    wprintf(fmt_word, L"MajorOperatingSystemVersion", header->MajorOperatingSystemVersion);
-    wprintf(fmt_word, L"MinorOperatingSystemVersion", header->MinorOperatingSystemVersion);
-    wprintf(fmt_word, L"MajorImageVersion", header->MajorImageVersion);
-    wprintf(fmt_word, L"MinorImageVersion", header->MinorImageVersion);
-    wprintf(fmt_word, L"MajorSubsystemVersion", header->MajorSubsystemVersion);
-    wprintf(fmt_word, L"MinorSubsystemVersion", header->MinorSubsystemVersion);
-    wprintf(fmt_dword, L"Win32VersionValue", header->Win32VersionValue);
-    wprintf(fmt_dword, L"SizeOfImage", header->SizeOfImage);
-    wprintf(fmt_dword, L"SizeOfHeaders", header->SizeOfHeaders);
-    wprintf(fmt_dword, L"CheckSum", header->CheckSum);
-    wprintf(fmt_word, L"Subsystem", header->Subsystem);
-    wprintf(fmt_word_hex, L"DllCharacteristics", header->DllCharacteristics);
-    wprintf(fmt_ulonglong, L"SizeOfStackReserve", header->SizeOfStackReserve);
-    wprintf(fmt_ulonglong, L"SizeOfStackCommit", header->SizeOfStackCommit);
-    wprintf(fmt_ulonglong, L"SizeOfHeapReserve", header->SizeOfHeapReserve);
-    wprintf(fmt_ulonglong, L"SizeOfHeapCommit", header->SizeOfHeapCommit);
-    wprintf(fmt_dword, L"LoaderFlags", header->LoaderFlags);
-    wprintf(fmt_dword, L"NumberOfRvaAndSizes", header->NumberOfRvaAndSizes);
+    #define FMT_BYTE          L"%-27s : %hhu"
+    #define FMT_WORD          L"%-27s : %hu"
+    #define FMT_WORD_HEX      L"%-27s : 0x%hX"
+    #define FMT_DWORD         L"%-27s : %lu"
+    #define FMT_DWORD_HEX     L"%-27s : 0x%lX"
+    #define FMT_ULONGLONG_HEX L"%-27s : 0x%llX"
 
-    //IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+    wprintf(FMT_WORD_HEX L" (%s)\n", L"Magic", header->Magic,
+            header->Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC ? L"PE32+" : L"PE32");
+    wprintf(FMT_BYTE L"\n", L"MajorLinkerVersion", header->MajorLinkerVersion);
+    wprintf(FMT_BYTE L"\n", L"MinorLinkerVersion", header->MinorLinkerVersion);
+    wprintf(FMT_DWORD_HEX L"\n", L"SizeOfCode", header->SizeOfCode);
+    wprintf(FMT_DWORD_HEX L"\n", L"SizeOfInitializedData", header->SizeOfInitializedData);
+    wprintf(FMT_DWORD_HEX L"\n", L"SizeOfUninitializedData", header->SizeOfUninitializedData);
+    wprintf(FMT_DWORD_HEX L" (0x%016llX)\n", L"AddressOfEntryPoint", header->AddressOfEntryPoint,
+            header->ImageBase + header->AddressOfEntryPoint);
+    wprintf(FMT_DWORD_HEX L"\n", L"BaseOfCode", header->BaseOfCode);
+    wprintf(FMT_ULONGLONG_HEX L" (0x%016llX to 0x%016llX)\n", L"ImageBase", header->ImageBase,
+            header->ImageBase, header->ImageBase + header->SizeOfImage - 1);
+    wprintf(FMT_DWORD_HEX L"\n", L"SectionAlignment", header->SectionAlignment);
+    wprintf(FMT_DWORD_HEX L"\n", L"FileAlignment", header->FileAlignment);
+    wprintf(FMT_WORD L"\n", L"MajorOperatingSystemVersion", header->MajorOperatingSystemVersion);
+    wprintf(FMT_WORD L"\n", L"MinorOperatingSystemVersion", header->MinorOperatingSystemVersion);
+    wprintf(FMT_WORD L"\n", L"MajorImageVersion", header->MajorImageVersion);
+    wprintf(FMT_WORD L"\n", L"MinorImageVersion", header->MinorImageVersion);
+    wprintf(FMT_WORD L"\n", L"MajorSubsystemVersion", header->MajorSubsystemVersion);
+    wprintf(FMT_WORD L"\n", L"MinorSubsystemVersion", header->MinorSubsystemVersion);
+    wprintf(FMT_DWORD L"\n", L"Win32VersionValue", header->Win32VersionValue);
+    wprintf(FMT_DWORD_HEX L"\n", L"SizeOfImage", header->SizeOfImage);
+    wprintf(FMT_DWORD_HEX L"\n", L"SizeOfHeaders", header->SizeOfHeaders);
+    wprintf(FMT_DWORD_HEX L"\n", L"CheckSum", header->CheckSum);
+    wprintf(FMT_WORD L" (%s)\n", L"Subsystem", header->Subsystem,
+            get_subsystem_description(header->Subsystem));
+    wprintf(FMT_WORD_HEX L"\n", L"DllCharacteristics", header->DllCharacteristics); // TODO: list DLL characteristics
+    wprintf(FMT_ULONGLONG_HEX L"\n", L"SizeOfStackReserve", header->SizeOfStackReserve);
+    wprintf(FMT_ULONGLONG_HEX L"\n", L"SizeOfStackCommit", header->SizeOfStackCommit);
+    wprintf(FMT_ULONGLONG_HEX L"\n", L"SizeOfHeapReserve", header->SizeOfHeapReserve);
+    wprintf(FMT_ULONGLONG_HEX L"\n", L"SizeOfHeapCommit", header->SizeOfHeapCommit);
+    wprintf(FMT_DWORD_HEX L"\n", L"LoaderFlags", header->LoaderFlags);
+    wprintf(FMT_DWORD L"\n", L"NumberOfRvaAndSizes", header->NumberOfRvaAndSizes);
+
+    // See https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#optional-header-data-directories-image-only
+    const wchar_t *data_directory_entries[] = {
+        L"Export Table",
+        L"Import Table",
+        L"Resource Table",
+        L"Exception Table",
+        L"Certificate Table",
+        L"Base Relocation Table",
+        L"Debug",
+        L"Architecture",
+        L"Global Pointer",
+        L"Thread Local Storage (TLS)",
+        L"Load Config Table",
+        L"Bound Import Table",
+        L"Import Address Table (IAT)",
+        L"Delay Import Descriptor",
+        L"CLR Runtime Header",
+        L"Reserved"
+    };
+
+    for (DWORD i = 0; i < header->NumberOfRvaAndSizes; ++i) {
+        wprintf(L" - DataDirectory[%2d]: RVA [%8lX], Size [%8lX] - %s\n",
+                i, header->DataDirectory[i].VirtualAddress, header->DataDirectory[i].Size,
+                data_directory_entries[i]);
+    }
 
     wprintf(L"\n");
+}
+
+const wchar_t *get_subsystem_description(WORD subsystem) {
+    // See https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#windows-subsystem
+    switch (subsystem) {
+    case IMAGE_SUBSYSTEM_NATIVE:                   return L"Native";
+    case IMAGE_SUBSYSTEM_WINDOWS_GUI:              return L"Windows GUI";
+    case IMAGE_SUBSYSTEM_WINDOWS_CUI:              return L"Windows CUI";
+    case IMAGE_SUBSYSTEM_OS2_CUI:                  return L"OS/2 CUI";
+    case IMAGE_SUBSYSTEM_POSIX_CUI:                return L"POSIX CUI";
+    case IMAGE_SUBSYSTEM_NATIVE_WINDOWS:           return L"Native Win9x driver";
+    case IMAGE_SUBSYSTEM_WINDOWS_CE_GUI:           return L"Windows CE";
+    case IMAGE_SUBSYSTEM_EFI_APPLICATION:          return L"EFI application";
+    case IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER:  return L"EFI driver with boot services";
+    case IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER:       return L"EFI driver with run-time services";
+    case IMAGE_SUBSYSTEM_EFI_ROM:                  return L"EFI ROM image";
+    case IMAGE_SUBSYSTEM_XBOX:                     return L"XBOX";
+    case IMAGE_SUBSYSTEM_WINDOWS_BOOT_APPLICATION: return L"Windows boot application";
+    default:                                       return L"Unknown";
+    }
 }

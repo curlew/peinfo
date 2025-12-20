@@ -11,6 +11,7 @@
 ## Overview
 
 `peinfo` is a small standalone utility for examining Portable Executable (PE) files.
+See the [PE Format Specification](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format).
 
 
 ## Usage
@@ -39,10 +40,10 @@ ____________________  File Header  _____________________________________________
 Machine              : 0x8664 (x64)
 NumberOfSections     : 7
 TimeDateStamp        : 1766202990 (2025-12-20 03:56:30 UTC)
-PointerToSymbolTable : 0
+PointerToSymbolTable : 0x0
 NumberOfSymbols      : 0
-SizeOfOptionalHeader : 240
-Characteristics      : 0x0022 (IMAGE_FILE_EXECUTABLE_IMAGE, IMAGE_FILE_LARGE_ADDRESS_AWARE)
+SizeOfOptionalHeader : 0xF0
+Characteristics      : 0x22 (IMAGE_FILE_EXECUTABLE_IMAGE, IMAGE_FILE_LARGE_ADDRESS_AWARE)
 ```
 
 </details>
@@ -52,17 +53,17 @@ Characteristics      : 0x0022 (IMAGE_FILE_EXECUTABLE_IMAGE, IMAGE_FILE_LARGE_ADD
 
 ```
 ____________________  Optional Header  _________________________________________
-Magic                       : 0x20B
+Magic                       : 0x20B (PE32+)
 MajorLinkerVersion          : 14
 MinorLinkerVersion          : 38
-SizeOfCode                  : 66560
-SizeOfInitializedData       : 53760
-SizeOfUninitializedData     : 0
-AddressOfEntryPoint         : 0x1278
+SizeOfCode                  : 0x19400
+SizeOfInitializedData       : 0x10E00
+SizeOfUninitializedData     : 0x0
+AddressOfEntryPoint         : 0x2650 (0x0000000140002650)
 BaseOfCode                  : 0x1000
-ImageBase                   : 0x140000000
-SectionAlignment            : 4096
-FileAlignment               : 512
+ImageBase                   : 0x140000000 (0x0000000140000000 to 0x000000014002FFFF)
+SectionAlignment            : 0x1000
+FileAlignment               : 0x200
 MajorOperatingSystemVersion : 6
 MinorOperatingSystemVersion : 0
 MajorImageVersion           : 0
@@ -70,17 +71,33 @@ MinorImageVersion           : 0
 MajorSubsystemVersion       : 6
 MinorSubsystemVersion       : 0
 Win32VersionValue           : 0
-SizeOfImage                 : 139264
-SizeOfHeaders               : 1024
-CheckSum                    : 0
-Subsystem                   : 3
+SizeOfImage                 : 0x30000
+SizeOfHeaders               : 0x400
+CheckSum                    : 0x0
+Subsystem                   : 3 (Windows CUI)
 DllCharacteristics          : 0x8160
-SizeOfStackReserve          : 1048576
-SizeOfStackCommit           : 4096
-SizeOfHeapReserve           : 1048576
-SizeOfHeapCommit            : 4096
-LoaderFlags                 : 0
+SizeOfStackReserve          : 0x100000
+SizeOfStackCommit           : 0x1000
+SizeOfHeapReserve           : 0x100000
+SizeOfHeapCommit            : 0x1000
+LoaderFlags                 : 0x0
 NumberOfRvaAndSizes         : 16
+ - DataDirectory[ 0]: RVA [       0], Size [       0] - Export Table
+ - DataDirectory[ 1]: RVA [   27114], Size [      28] - Import Table
+ - DataDirectory[ 2]: RVA [   2E000], Size [     1E0] - Resource Table
+ - DataDirectory[ 3]: RVA [   2B000], Size [    150C] - Exception Table
+ - DataDirectory[ 4]: RVA [       0], Size [       0] - Certificate Table
+ - DataDirectory[ 5]: RVA [   2F000], Size [     6F4] - Base Relocation Table
+ - DataDirectory[ 6]: RVA [   256B0], Size [      1C] - Debug
+ - DataDirectory[ 7]: RVA [       0], Size [       0] - Architecture
+ - DataDirectory[ 8]: RVA [       0], Size [       0] - Global Pointer
+ - DataDirectory[ 9]: RVA [       0], Size [       0] - Thread Local Storage (TLS)
+ - DataDirectory[10]: RVA [   25570], Size [     140] - Load Config Table
+ - DataDirectory[11]: RVA [       0], Size [       0] - Bound Import Table
+ - DataDirectory[12]: RVA [   1B000], Size [     290] - Import Address Table (IAT)
+ - DataDirectory[13]: RVA [       0], Size [       0] - Delay Import Descriptor
+ - DataDirectory[14]: RVA [       0], Size [       0] - CLR Runtime Header
+ - DataDirectory[15]: RVA [       0], Size [       0] - Reserved
 ```
 
 </details>
@@ -170,81 +187,46 @@ Characteristics      : 0x42000040 (IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM
 
 ```
 ____________________  Import Table  ____________________________________________
+ - SHELL32.dll
+   - ShellExecuteW
  - KERNEL32.dll
-   - QueryPerformanceCounter
-   - GetCurrentProcessId
    - GetCurrentThreadId
    - GetSystemTimeAsFileTime
-   - InitializeSListHead
+   - GetTickCount
    - RtlCaptureContext
-   - RtlLookupFunctionEntry
+   - GetCurrentProcessId
    - RtlVirtualUnwind
-   - IsDebuggerPresent
    - UnhandledExceptionFilter
    - SetUnhandledExceptionFilter
-   - GetStartupInfoW
-   - IsProcessorFeaturePresent
-   - GetModuleHandleW
-   - WriteConsoleW
-   - RtlUnwindEx
-   - GetLastError
-   - SetLastError
-   - EnterCriticalSection
-   - LeaveCriticalSection
-   - DeleteCriticalSection
-   - InitializeCriticalSectionAndSpinCount
-   - TlsAlloc
-   - TlsGetValue
-   - TlsSetValue
-   - TlsFree
-   - FreeLibrary
-   - GetProcAddress
-   - LoadLibraryExW
-   - EncodePointer
-   - RaiseException
-   - RtlPcToFileHeader
-   - GetStdHandle
-   - WriteFile
-   - GetModuleFileNameW
    - GetCurrentProcess
-   - ExitProcess
    - TerminateProcess
-   - GetModuleHandleExW
-   - GetCommandLineA
-   - GetCommandLineW
-   - GetFileType
-   - HeapAlloc
-   - HeapFree
-   - FindClose
-   - FindFirstFileExW
-   - FindNextFileW
-   - IsValidCodePage
-   - GetACP
-   - GetOEMCP
-   - GetCPInfo
-   - MultiByteToWideChar
-   - WideCharToMultiByte
-   - GetEnvironmentStringsW
-   - FreeEnvironmentStringsW
-   - SetEnvironmentVariableW
-   - SetStdHandle
-   - GetStringTypeW
-   - FlsAlloc
-   - FlsGetValue
-   - FlsSetValue
-   - FlsFree
-   - CompareStringW
-   - LCMapStringW
-   - GetProcessHeap
-   - GetFileSizeEx
-   - SetFilePointerEx
-   - GetConsoleOutputCP
-   - GetConsoleMode
-   - HeapSize
-   - HeapReAlloc
-   - FlushFileBuffers
-   - CloseHandle
-   - CreateFileW
+   - QueryPerformanceCounter
+   - RtlLookupFunctionEntry
+ - msvcrt.dll
+   - __setusermatherr
+   - _initterm
+   - __C_specific_handler
+   - _wcmdln
+   - _fmode
+   - _commode
+   - ?terminate@@YAXXZ
+   - _cexit
+   - __wgetmainargs
+   - _amsg_exit
+   - _XcptFilter
+   - exit
+   - __set_app_type
+   - _exit
+ - ADVAPI32.dll
+   - EventSetInformation
+   - EventWriteTransfer
+   - EventRegister
+ - api-ms-win-core-synch-l1-2-0.dll
+   - Sleep
+ - api-ms-win-core-processthreads-l1-1-0.dll
+   - GetStartupInfoW
+ - api-ms-win-core-libraryloader-l1-2-0.dll
+   - GetModuleHandleW
 ```
 
 </details>
