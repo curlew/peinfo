@@ -109,72 +109,72 @@ NumberOfRvaAndSizes         : 16
 ____________________  Section Table  ___________________________________________
   [ Section 1 of 6 ]
 Name                 : .text
-PhysicalAddress      : 66480
-VirtualAddress       : 4096
-SizeOfRawData        : 66560
-PointerToRawData     : 1024
-PointerToRelocations : 0
-PointerToLinenumbers : 0
+VirtualSize          : 0xBD0
+VirtualAddress       : 0x1000
+SizeOfRawData        : 0xC00
+PointerToRawData     : 0x400
+PointerToRelocations : 0x0
+PointerToLinenumbers : 0x0
 NumberOfRelocations  : 0
 NumberOfLinenumbers  : 0
 Characteristics      : 0x60000020 (IMAGE_SCN_CNT_CODE, IMAGE_SCN_MEM_EXECUTE, IMAGE_SCN_MEM_READ)
 
   [ Section 2 of 6 ]
 Name                 : .rdata
-PhysicalAddress      : 38786
-VirtualAddress       : 73728
-SizeOfRawData        : 38912
-PointerToRawData     : 67584
-PointerToRelocations : 0
-PointerToLinenumbers : 0
+VirtualSize          : 0xC76
+VirtualAddress       : 0x2000
+SizeOfRawData        : 0xE00
+PointerToRawData     : 0x1000
+PointerToRelocations : 0x0
+PointerToLinenumbers : 0x0
 NumberOfRelocations  : 0
 NumberOfLinenumbers  : 0
 Characteristics      : 0x40000040 (IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ)
 
   [ Section 3 of 6 ]
 Name                 : .data
-PhysicalAddress      : 7368
-VirtualAddress       : 114688
-SizeOfRawData        : 3072
-PointerToRawData     : 106496
-PointerToRelocations : 0
-PointerToLinenumbers : 0
+VirtualSize          : 0x6B8
+VirtualAddress       : 0x3000
+SizeOfRawData        : 0x200
+PointerToRawData     : 0x1E00
+PointerToRelocations : 0x0
+PointerToLinenumbers : 0x0
 NumberOfRelocations  : 0
 NumberOfLinenumbers  : 0
-Characteristics      : 0xc0000040 (IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ, IMAGE_SCN_MEM_WRITE)
+Characteristics      : 0xC0000040 (IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ, IMAGE_SCN_MEM_WRITE)
 
   [ Section 4 of 6 ]
 Name                 : .pdata
-PhysicalAddress      : 4308
-VirtualAddress       : 122880
-SizeOfRawData        : 4608
-PointerToRawData     : 109568
-PointerToRelocations : 0
-PointerToLinenumbers : 0
+VirtualSize          : 0xF0
+VirtualAddress       : 0x4000
+SizeOfRawData        : 0x200
+PointerToRawData     : 0x2000
+PointerToRelocations : 0x0
+PointerToLinenumbers : 0x0
 NumberOfRelocations  : 0
 NumberOfLinenumbers  : 0
 Characteristics      : 0x40000040 (IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ)
 
   [ Section 5 of 6 ]
-Name                 : _RDATA
-PhysicalAddress      : 500
-VirtualAddress       : 131072
-SizeOfRawData        : 512
-PointerToRawData     : 114176
-PointerToRelocations : 0
-PointerToLinenumbers : 0
+Name                 : .rsrc
+VirtualSize          : 0x4710
+VirtualAddress       : 0x5000
+SizeOfRawData        : 0x4800
+PointerToRawData     : 0x2200
+PointerToRelocations : 0x0
+PointerToLinenumbers : 0x0
 NumberOfRelocations  : 0
 NumberOfLinenumbers  : 0
 Characteristics      : 0x40000040 (IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ)
 
   [ Section 6 of 6 ]
 Name                 : .reloc
-PhysicalAddress      : 1624
-VirtualAddress       : 135168
-SizeOfRawData        : 2048
-PointerToRawData     : 114688
-PointerToRelocations : 0
-PointerToLinenumbers : 0
+VirtualSize          : 0x2C
+VirtualAddress       : 0xA000
+SizeOfRawData        : 0x200
+PointerToRawData     : 0x6A00
+PointerToRelocations : 0x0
+PointerToLinenumbers : 0x0
 NumberOfRelocations  : 0
 NumberOfLinenumbers  : 0
 Characteristics      : 0x42000040 (IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_DISCARDABLE, IMAGE_SCN_MEM_READ)

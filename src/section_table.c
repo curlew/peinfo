@@ -35,20 +35,20 @@ void print_section_table(PIMAGE_SECTION_HEADER header, WORD section_count) {
     for (int i = 0; i < section_count; ++i, ++header) {
         wprintf(L"  [ Section %d of %d ]\n", i + 1, section_count);
 
-        const wchar_t *fmt_string    = L"%-20s : %S\n",
-                      *fmt_word      = L"%-20s : %hu\n",
-                      *fmt_dword     = L"%-20s : %lu\n";
-        wprintf(fmt_string, L"Name",                 header->Name);
-        wprintf(fmt_dword,  L"PhysicalAddress",      header->Misc.VirtualSize);
-        wprintf(fmt_dword,  L"VirtualAddress",       header->VirtualAddress);
-        wprintf(fmt_dword,  L"SizeOfRawData",        header->SizeOfRawData);
-        wprintf(fmt_dword,  L"PointerToRawData",     header->PointerToRawData);
-        wprintf(fmt_dword,  L"PointerToRelocations", header->PointerToRelocations);
-        wprintf(fmt_dword,  L"PointerToLinenumbers", header->PointerToLinenumbers);
-        wprintf(fmt_word,   L"NumberOfRelocations",  header->NumberOfRelocations);
-        wprintf(fmt_word,   L"NumberOfLinenumbers",  header->NumberOfLinenumbers);
+        #define FMT_STRING    L"%-20s : %S"
+        #define FMT_WORD      L"%-20s : %hu"
+        #define FMT_DWORD_HEX L"%-20s : 0x%lX"
 
-        wprintf(L"%-20s : %#010lx", L"Characteristics", header->Characteristics);
+        wprintf(FMT_STRING L"\n",    L"Name",                 header->Name);
+        wprintf(FMT_DWORD_HEX L"\n", L"VirtualSize",          header->Misc.VirtualSize);
+        wprintf(FMT_DWORD_HEX L"\n", L"VirtualAddress",       header->VirtualAddress);
+        wprintf(FMT_DWORD_HEX L"\n", L"SizeOfRawData",        header->SizeOfRawData);
+        wprintf(FMT_DWORD_HEX L"\n", L"PointerToRawData",     header->PointerToRawData);
+        wprintf(FMT_DWORD_HEX L"\n", L"PointerToRelocations", header->PointerToRelocations);
+        wprintf(FMT_DWORD_HEX L"\n", L"PointerToLinenumbers", header->PointerToLinenumbers);
+        wprintf(FMT_WORD L"\n",      L"NumberOfRelocations",  header->NumberOfRelocations);
+        wprintf(FMT_WORD L"\n",      L"NumberOfLinenumbers",  header->NumberOfLinenumbers);
+        wprintf(FMT_DWORD_HEX,       L"Characteristics",      header->Characteristics);
         if (header->Characteristics == 0) {
             wprintf(L"\n");
         } else {
