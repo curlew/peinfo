@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(peinfo VERSION 1.0.0)
+project(peinfo VERSION 1.1.0)
 
 add_executable(peinfo
     src/main.c
