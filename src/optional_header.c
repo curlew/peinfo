@@ -1,7 +1,20 @@
 #include "optional_header.h"
 
+#include "characteristics.h"
 #include "utils.h"
 #include <stdio.h>
+
+#define DLL_CHARACTERISTIC_LIST(X) \
+    X(IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA)       X(IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE) \
+    X(IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY)       X(IMAGE_DLLCHARACTERISTICS_NX_COMPAT) \
+    X(IMAGE_DLLCHARACTERISTICS_NO_ISOLATION)          X(IMAGE_DLLCHARACTERISTICS_NO_SEH) \
+    X(IMAGE_DLLCHARACTERISTICS_NO_BIND)               X(IMAGE_DLLCHARACTERISTICS_APPCONTAINER) \
+    X(IMAGE_DLLCHARACTERISTICS_WDM_DRIVER)            X(IMAGE_DLLCHARACTERISTICS_GUARD_CF) \
+    X(IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE)
+
+const struct characteristic dll_characteristics[] = {
+    DLL_CHARACTERISTIC_LIST(GENERATE_CHARACTERISTIC_STRUCT)
+};
 
 static const wchar_t *get_subsystem_description(WORD subsystem);
 
@@ -43,7 +56,15 @@ void print_optional_header(PIMAGE_OPTIONAL_HEADER header) {
     wprintf(FMT_DWORD_HEX L"\n", L"CheckSum", header->CheckSum);
     wprintf(FMT_WORD L" (%s)\n", L"Subsystem", header->Subsystem,
             get_subsystem_description(header->Subsystem));
-    wprintf(FMT_WORD_HEX L"\n", L"DllCharacteristics", header->DllCharacteristics); // TODO: list DLL characteristics
+    wprintf(FMT_WORD_HEX, L"DllCharacteristics", header->DllCharacteristics);
+    if (header->DllCharacteristics == 0) {
+        wprintf(L"\n");
+    } else {
+        wprintf(L" (");
+        print_characteristics(header->DllCharacteristics, dll_characteristics,
+                              sizeof (dll_characteristics) / sizeof (dll_characteristics[0]));
+        wprintf(L")\n");
+    }
     wprintf(FMT_ULONGLONG_HEX L"\n", L"SizeOfStackReserve", header->SizeOfStackReserve);
     wprintf(FMT_ULONGLONG_HEX L"\n", L"SizeOfStackCommit", header->SizeOfStackCommit);
     wprintf(FMT_ULONGLONG_HEX L"\n", L"SizeOfHeapReserve", header->SizeOfHeapReserve);

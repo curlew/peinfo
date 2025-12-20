@@ -57,9 +57,9 @@ Magic                       : 0x20B (PE32+)
 MajorLinkerVersion          : 14
 MinorLinkerVersion          : 38
 SizeOfCode                  : 0x19400
-SizeOfInitializedData       : 0x10E00
+SizeOfInitializedData       : 0x11200
 SizeOfUninitializedData     : 0x0
-AddressOfEntryPoint         : 0x2650 (0x0000000140002650)
+AddressOfEntryPoint         : 0x26A0 (0x00000001400026A0)
 BaseOfCode                  : 0x1000
 ImageBase                   : 0x140000000 (0x0000000140000000 to 0x000000014002FFFF)
 SectionAlignment            : 0x1000
@@ -75,7 +75,7 @@ SizeOfImage                 : 0x30000
 SizeOfHeaders               : 0x400
 CheckSum                    : 0x0
 Subsystem                   : 3 (Windows CUI)
-DllCharacteristics          : 0x8160
+DllCharacteristics          : 0x8160 (IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA, IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE, IMAGE_DLLCHARACTERISTICS_NX_COMPAT, IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE)
 SizeOfStackReserve          : 0x100000
 SizeOfStackCommit           : 0x1000
 SizeOfHeapReserve           : 0x100000
@@ -83,16 +83,16 @@ SizeOfHeapCommit            : 0x1000
 LoaderFlags                 : 0x0
 NumberOfRvaAndSizes         : 16
  - DataDirectory[ 0]: RVA [       0], Size [       0] - Export Table
- - DataDirectory[ 1]: RVA [   27114], Size [      28] - Import Table
+ - DataDirectory[ 1]: RVA [   273BC], Size [      28] - Import Table
  - DataDirectory[ 2]: RVA [   2E000], Size [     1E0] - Resource Table
- - DataDirectory[ 3]: RVA [   2B000], Size [    150C] - Exception Table
+ - DataDirectory[ 3]: RVA [   2B000], Size [    1518] - Exception Table
  - DataDirectory[ 4]: RVA [       0], Size [       0] - Certificate Table
- - DataDirectory[ 5]: RVA [   2F000], Size [     6F4] - Base Relocation Table
- - DataDirectory[ 6]: RVA [   256B0], Size [      1C] - Debug
+ - DataDirectory[ 5]: RVA [   2F000], Size [     710] - Base Relocation Table
+ - DataDirectory[ 6]: RVA [   25940], Size [      1C] - Debug
  - DataDirectory[ 7]: RVA [       0], Size [       0] - Architecture
  - DataDirectory[ 8]: RVA [       0], Size [       0] - Global Pointer
  - DataDirectory[ 9]: RVA [       0], Size [       0] - Thread Local Storage (TLS)
- - DataDirectory[10]: RVA [   25570], Size [     140] - Load Config Table
+ - DataDirectory[10]: RVA [   25800], Size [     140] - Load Config Table
  - DataDirectory[11]: RVA [       0], Size [       0] - Bound Import Table
  - DataDirectory[12]: RVA [   1B000], Size [     290] - Import Address Table (IAT)
  - DataDirectory[13]: RVA [       0], Size [       0] - Delay Import Descriptor
